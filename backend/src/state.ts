@@ -4,15 +4,15 @@ import { PracticeRecord } from "./types";
 // --- Initial Data ---
 // Define some sample flashcards
 const initialCards: Flashcard[] = [
-  // new Flashcard("der Tisch", "the table", "Starts with T", ["noun", "german"]),
-  // new Flashcard("la silla", "the chair", "Starts with S", ["noun", "spanish"]),
-  // new Flashcard("bonjour", "hello", "Greeting", ["phrase", "french"]),
-  // new Flashcard("arigato", "thank you", "Expression of gratitude", [
-  //   "phrase",
-  //   "japanese",
-  // ]),
-  // new Flashcard("der Hund", "the dog", "Common pet", ["noun", "german"]),
-  // new Flashcard("el gato", "the cat", "Common pet", ["noun", "spanish"]),
+  new Flashcard("der Tisch", "the table", "Starts with T", ["noun", "german"]),
+  new Flashcard("la silla", "the chair", "Starts with S", ["noun", "spanish"]),
+  new Flashcard("bonjour", "hello", "Greeting", ["phrase", "french"]),
+  new Flashcard("arigato", "thank you", "Expression of gratitude", [
+    "phrase",
+    "japanese",
+  ]),
+  new Flashcard("der Hund", "the dog", "Common pet", ["noun", "german"]),
+  new Flashcard("el gato", "the cat", "Common pet", ["noun", "spanish"]),
 ];
 
 // --- State Variables ---

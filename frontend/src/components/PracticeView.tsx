@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Flashcard, AnswerDifficulty } from "../types";
 import {
   fetchPracticeCards,
@@ -6,6 +6,8 @@ import {
   advanceDay,
   fetchHint,
 } from "../services/api";
+import HandPoseCamera from "./HandPoseCamera";
+import { HandPose } from "../utils/handpose";
 
 const PracticeView = () => {
   const [practiceCards, setPracticeCards] = useState<Flashcard[]>([]);
@@ -15,10 +17,17 @@ const PracticeView = () => {
   const [error, setError] = useState<string | null>(null);
   const [day, setDay] = useState<number>(0);
   const [sessionFinished, setSessionFinished] = useState<boolean>(false);
-
   const [hint, setHint] = useState<string | null>(null);
   const [loadingHint, setLoadingHint] = useState(false);
   const [hintError, setHintError] = useState<string | null>(null);
+
+  const showBackRef = useRef<boolean>(false);
+  const currentCardIndexRef = useRef<number>(0);
+
+  useEffect(() => {
+    showBackRef.current = showBack;
+    currentCardIndexRef.current = currentCardIndex;
+  }, [showBack, currentCardIndex]);
 
   const loadPracticeCards = async () => {
     setIsLoading(true);
@@ -50,13 +59,13 @@ const PracticeView = () => {
   };
 
   const handleAnswer = async (difficulty: AnswerDifficulty) => {
-    if (currentCardIndex >= practiceCards.length) return;
+    if (currentCardIndexRef.current >= practiceCards.length) return;
 
-    const currentCard = practiceCards[currentCardIndex];
+    const currentCard = practiceCards[currentCardIndexRef.current];
     try {
       await submitAnswer(currentCard.front, currentCard.back, difficulty);
       // Move to the next card
-      const nextIndex = currentCardIndex + 1;
+      const nextIndex = currentCardIndexRef.current + 1;
       if (nextIndex < practiceCards.length) {
         setCurrentCardIndex(nextIndex);
         setHint(null);
@@ -82,6 +91,30 @@ const PracticeView = () => {
       console.error("Failed to advance day:", err);
       setError("Could not advance to the next day.");
     }
+  };
+
+  // Handle hand pose detection
+  const handleHandPoseDetected = (pose: HandPose) => {
+    if (!pose || !showBackRef.current) return;
+
+    let difficulty: AnswerDifficulty;
+
+    switch (pose) {
+      case "thumbs_up":
+        difficulty = AnswerDifficulty.Easy;
+        break;
+      case "thumbs_down":
+        difficulty = AnswerDifficulty.Wrong;
+        break;
+      case "flat_hand":
+        difficulty = AnswerDifficulty.Hard;
+        break;
+      default:
+        return;
+    }
+
+    // Submit the answer
+    handleAnswer(difficulty);
   };
 
   if (isLoading) {
@@ -128,6 +161,17 @@ const PracticeView = () => {
       <p className="card-counter">
         Card {currentCardIndex + 1} of {practiceCards.length}
       </p>
+
+      {/* Hand Pose Camera */}
+      <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+        <HandPoseCamera
+          onPoseDetected={handleHandPoseDetected}
+          width={400}
+          height={325}
+          holdTimeMs={3000}
+        />
+      </div>
+
       {currentCard ? (
         <div className={`flashcard ${showBack ? "flashcard-back" : ""}`}>
           {showBack ? currentCard.back : currentCard.front}
@@ -155,6 +199,17 @@ const PracticeView = () => {
       ) : (
         <div>
           <p className="difficulty-text">How difficult was this card?</p>
+          <div
+            className="gesture-instructions"
+            style={{ marginBottom: "15px", fontSize: "14px", color: "#666" }}
+          >
+            <p>Use hand gestures to answer:</p>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              <li>👍 Thumbs up = Easy</li>
+              <li>👎 Thumbs down = Wrong</li>
+              <li>✋ Flat hand = Hard</li>
+            </ul>
+          </div>
           <div>
             <button
               className="btn btn-wrong"
