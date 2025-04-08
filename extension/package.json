@@ -1,0 +1,19 @@
+{
+  "name": "flashcards-extension",
+  "version": "1.0.0",
+  "description": "Browser extension for adding flashcards from any webpage",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "flashcards",
+    "browser-extension",
+    "learning",
+    "education"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

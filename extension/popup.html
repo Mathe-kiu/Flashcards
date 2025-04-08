@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcards Extension</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Flashcards</h1>
+      <div class="card-form">
+        <div class="form-group">
+          <label for="front">Front:</label>
+          <textarea
+            id="front"
+            placeholder="Enter the front of the flashcard"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="back">Back:</label>
+          <textarea
+            id="back"
+            placeholder="Enter the back of the flashcard"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="hint">Hint (optional):</label>
+          <input type="text" id="hint" placeholder="Enter a hint" />
+        </div>
+        <div class="form-group">
+          <label for="tags">Tags (comma separated):</label>
+          <input type="text" id="tags" placeholder="e.g., noun, german" />
+        </div>
+        <div class="buttons">
+          <button id="save-card" class="primary-btn">Save Card</button>
+          <button id="clear-form" class="secondary-btn">Clear</button>
+        </div>
+      </div>
+      <div class="status-message" id="status-message"></div>
+      <div class="recent-cards">
+        <h2>Recent Cards</h2>
+        <ul id="recent-cards-list"></ul>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

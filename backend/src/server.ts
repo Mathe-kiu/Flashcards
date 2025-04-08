@@ -134,6 +134,47 @@ app.post("/api/day/next", (req: Request, res: Response) => {
     .json({ message: `Advanced to day ${newDay}`, currentDay: newDay });
 });
 
+// POST /api/cards - Add a new card from the extension
+app.post("/api/cards", (req: Request, res: Response) => {
+  try {
+    const { front, back, hint, tags } = req.body;
+
+    // Validate required fields
+    if (!front || !back) {
+      res.status(400).json({ message: "Front and back are required" });
+      return;
+    }
+
+    // Create new flashcard
+    const newCard = new Flashcard(front, back, hint, tags || []);
+
+    // Get current buckets
+    const currentBuckets = state.getBuckets();
+
+    // Add to bucket 0 (new cards)
+    if (!currentBuckets.has(0)) {
+      currentBuckets.set(0, new Set());
+    }
+
+    const bucket0 = currentBuckets.get(0);
+    if (bucket0) {
+      bucket0.add(newCard);
+    }
+
+    // Update state
+    state.setBuckets(currentBuckets);
+
+    console.log(`Added new card: "${front}"`);
+    res.status(201).json({
+      message: "Card added successfully",
+      card: { front, back, hint, tags },
+    });
+  } catch (error) {
+    console.error("Error adding card:", error);
+    res.status(500).json({ message: "Error adding card" });
+  }
+});
+
 // --- Start Server ---
 app.listen(PORT, () => {
   console.log(`Backend server running at http://localhost:${PORT}`);
