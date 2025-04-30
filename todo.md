@@ -5,7 +5,7 @@ This checklist follows the iterative steps defined in the implementation plan. M
 ## Phase 1: Backend Persistence
 
 - [ ] **Step 1: State Serialization/Deserialization Helpers**
-  - [ ] Create `test/stateSerialization.test.ts`.
+  - [] Create `test/stateSerialization.test.ts`.
   - [ ] Write unit tests for `serializeState` (Map/Set -> Plain Object).
   - [ ] Write unit tests for `deserializeState` (Plain Object -> Map/Set).
   - [ ] Include tests for empty state, populated state, and state with history.
