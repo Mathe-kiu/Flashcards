@@ -14,6 +14,10 @@ app.use(express.json());
 
 // --- API Routes ---
 
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: "Hello World" });
+});
+
 // GET /api/practice - Get cards to practice for the current day
 app.get("/api/practice", (req: Request, res: Response) => {
   try {
