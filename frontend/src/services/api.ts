@@ -8,7 +8,7 @@ import {
 } from "../types";
 
 // Configure base URL for the backend API
-const API_BASE_URL = "http://13.60.59.59:3001/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
